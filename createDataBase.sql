@@ -1,0 +1,73 @@
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Books` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `ISBN` INT NOT NULL,
+  `noOfCopies` INT NOT NULL,
+  `Title` VARCHAR(45) NOT NULL,
+  `availableCopies` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Authors` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `mydb`.`bookAuthor` (
+  `bookId` INT NOT NULL,
+  `authorId` INT NOT NULL,
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`ID`),
+  INDEX `authorId_idx` (`authorId` ASC) VISIBLE,
+  INDEX `bookId_idx` (`bookId` ASC) VISIBLE,
+  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE,
+  CONSTRAINT `bookId`
+    FOREIGN KEY (`bookId`)
+    REFERENCES `mydb`.`Books` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `authorId`
+    FOREIGN KEY (`authorId`)
+    REFERENCES `mydb`.`Authors` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Members` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Loans` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `memberId` INT NOT NULL,
+  `dueDate` DATE NOT NULL,
+  `bookAuthorId` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `memberId_idx` (`memberId` ASC) VISIBLE,
+  INDEX `bookAuthorId_idx` (`bookAuthorId` ASC) VISIBLE,
+  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE,
+  CONSTRAINT `memberId`
+    FOREIGN KEY (`memberId`)
+    REFERENCES `mydb`.`Members` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `bookAuthorId`
+    FOREIGN KEY (`bookAuthorId`)
+    REFERENCES `mydb`.`bookAuthor` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+

@@ -1,0 +1,53 @@
+Books:
+- Id (PK)
+- Title
+- Author (Author)
+- ISBN
+- Number of copies (small int)
+- Available copies (small int)
+
+Members:
+- Id (PK)
+- Name 
+
+Books checked-out:
+- Id (PK)
+- Book Id (Books)
+- Members Id (Members)
+- return date
+
+Author:
+- Author Id (PK)
+- Name
+
+Book Author:
+- Book Id (Books)
+- Author Id (Author)
+
+
+
+Requirements:
+Edit the catalogue of books:
+- Add new books
+- Edit existing book details 
+- Add a copy of an existing book
+- Delete a copy of a book
+
+When browsing books, clicking on one shows:
+- Number of copies in total
+- Number of copies available, If book unavailable (show which user borrowed them, when they are due back)
+
+Edit members:
+- Add a new member
+- Edit existing member details
+
+Checking in/ Out:
+- The librarian can check out a copy of a book to a user:
+	-record return date (2 weeks from date borrowed)
+	- The book will have an id printed on it
+	- The user won't know their user Id but will know their name
+- The librarian can check in books:
+	-Told if the book was returned late
+
+- The homepage shows a list of books currently checked out, who by, and the due date for the return.
+
