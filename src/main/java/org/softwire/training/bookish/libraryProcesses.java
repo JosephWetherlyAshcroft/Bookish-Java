@@ -47,6 +47,23 @@ public class libraryProcesses {
         for(int i = 0; i < books.size(); i++){
             Book book = books.get(i);
             if(book.getTitle().equals(titleInput)){
+                Optional<Integer> noOfCopies = handle.createQuery("select noOfCopies from Books where Title like (?)")
+                        .bind(0, titleInput)
+                        .mapTo(Integer.class)
+                        .findFirst();
+                Optional<Integer> availableCopies = handle.createQuery("select availableCopies from Books where Title like (?)")
+                        .bind(0, titleInput)
+                        .mapTo(Integer.class)
+                        .findFirst();
+                handle.createUpdate("UPDATE Books SET noOfCopies = (?) WHERE Title = (?)")
+                        .bind(0,noOfCopies.get()+1)
+                        .bind(1,titleInput)
+                        .execute();
+                handle.createUpdate("UPDATE Books SET availableCopies = (?) WHERE Title = (?)")
+                        .bind(0,availableCopies.get()+1)
+                        .bind(1,titleInput)
+                        .execute();
+
                 bookExists = true;
                 break;
             }
