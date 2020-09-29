@@ -4,7 +4,6 @@ public class Author {
     int ID;
     String Name;
 
-
     public Author(int id, String name){
         ID = id;
         Name = name;

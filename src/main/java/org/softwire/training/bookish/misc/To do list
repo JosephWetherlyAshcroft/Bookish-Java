@@ -1,0 +1,34 @@
+To do list summary:
+
+- Check if author already exists, if so, add a new author/book connection but do not add the author to the table
+- Be able to add multiple copies of one book at once
+- Sort and print books (by author?)
+- be able to search the books using an input
+- edit the details of a book
+- add a new copy of an existing book
+- delete a copy of a book
+
+
+- When browsing books, clicking on a book shows:
+    The number of copies in total
+    The number of copies which are currently available.
+    Where some books are unavailable, it shows which user borrowed them, and the date that they're due back.
+    Members
+
+- The librarian can see a list of library members
+    Clicking on a member should show a list of books they have checked out
+
+- The librarian can edit the library members
+    Add a new member
+    Edit a member
+    (e.g. if they change their name)
+
+- Checking in / out
+    The librarian can check out a copy of a book to a user.
+    Bear in mind:
+    We should record when the book is due back (let's say 2 weeks from now)
+    The book will have the ID printed on it
+    The user won't know their user ID, but they will know their name!
+    The librarian can check in books
+    The librarian should be told if the book was returned late, so they can give the member a stern telling off!
+    The homepage could show a list of books which are currently checked out, who they are checked out by, and the due date for returns.

@@ -1,5 +1,4 @@
 package org.softwire.training.bookish.models.database;
-
 import java.math.BigInteger;
 
 public class Book {

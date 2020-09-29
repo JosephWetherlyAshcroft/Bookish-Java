@@ -106,9 +106,6 @@ public class libraryProcesses {
                         .bind(1,authorid.get())
                         .execute();
             }
-
         }
-
     }
-
 }

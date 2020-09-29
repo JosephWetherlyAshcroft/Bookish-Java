@@ -3,12 +3,10 @@ import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.mapper.reflect.ConstructorMapper;
 import org.softwire.training.bookish.models.database.Book;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-
 
 public class Main {
     private static final String hostname = "127.0.0.1";
@@ -22,6 +20,9 @@ public class Main {
         Handle handle = jdbi.open();
 
         libraryProcesses.outPutAllBooks(handle);
-        libraryProcesses.addNewBook(handle);
+
+        while (1==1){ //to add lots of new books for now
+            libraryProcesses.addNewBook(handle);
+        }
     }
 }
