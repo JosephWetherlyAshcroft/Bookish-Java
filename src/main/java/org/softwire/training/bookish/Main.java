@@ -10,10 +10,10 @@ import java.sql.SQLException;
 public class Main {
 
     public static void main(String[] args) throws SQLException {
-        String hostname = "localhost";
-        String database = "bookish";
-        String user = "bookish";
-        String password = "bookish";
+        String hostname = "127.0.0.1";
+        String database = "Library";
+        String user = "root";
+        String password = "BookishPassword";
         String connectionString = "jdbc:mysql://" + hostname + "/" + database + "?user=" + user + "&password=" + password + "&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT&useSSL=false";
 
         jdbcMethod(connectionString);
