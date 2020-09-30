@@ -1,12 +1,5 @@
 To do list summary:
 
-- Display books with author name
-- Display list of authors for a specific book using one query
-    get current book id
-    get all author ids related to that book id from bookauthor
-    output the author names connected to those ids
-
-- Sort and print books (by author?)
 - be able to search the books using an input
 - edit the details of a book
 - add a new copy of an existing book

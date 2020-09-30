@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class libraryProcesses {
     public static void outPutAllBooks(Handle handle) {
-        List<Book> books = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books")
+        List<Book> books = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books ORDER BY Title")
                 .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
                 .list();
 
@@ -122,6 +122,35 @@ public class libraryProcesses {
                             .execute();
                 }
             }
+        }
+    }
+
+    public static void searchByTitle(Handle handle){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter title of book: ");
+        String titleOfBook = sc.next();
+
+        Optional<Book> book = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books WHERE Title = " + titleOfBook)
+                .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
+                .findFirst();
+
+        if (book.isPresent()){
+            System.out.println("\nID: " + book.get().getID() + "\nTitle: " + book.get().getTitle() + "\nISBN: " + book.get().getISBN() + "\nNumber of copies: " +  book.get().getNoOfCopies() + "\nAvailable copies: " + book.get().getAvailableCopies());
+
+            String SELECT_ALL = "SELECT Authors.authorName "
+                    + "FROM Authors JOIN bookAuthor on Authors.id = bookAuthor.authorId "
+                    + "WHERE bookAuthor.bookId = "+ book.get().getID();
+            List<String> bookAuthor = handle.createQuery(SELECT_ALL)
+                    .mapTo(String.class)
+                    .list();
+
+            System.out.println("Author(s): ");
+            for(int n = 0; n < bookAuthor.size(); n++) {
+                System.out.println("- " + bookAuthor.get(n));
+            }
+        }
+        else{
+            System.out.println("Book not found");
         }
     }
 }
