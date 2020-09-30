@@ -87,8 +87,8 @@ public class libraryProcesses {
                     .bind(0, authorInput)
                     .execute();
         }
-        if(!authorExists && !bookExists){
 
+        if(!bookExists){
             Optional<Integer> bookid = handle.createQuery("select ID from Books where Title like (?)")
                     .bind(0, titleInput)
                     .mapTo(Integer.class)
@@ -98,7 +98,6 @@ public class libraryProcesses {
                     .bind(0, authorInput)
                     .mapTo(Integer.class)
                     .findFirst();
-
 
             if(bookid.isPresent() && authorid.isPresent()){
                 handle.createUpdate("insert into bookAuthor (bookId, authorId) values (?,?)")

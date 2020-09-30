@@ -1,13 +1,11 @@
 To do list summary:
 
-- Check if author already exists, if so, add a new author/book connection but do not add the author to the table
 - Be able to add multiple copies of one book at once
 - Sort and print books (by author?)
 - be able to search the books using an input
 - edit the details of a book
 - add a new copy of an existing book
 - delete a copy of a book
-
 
 - When browsing books, clicking on a book shows:
     The number of copies in total
