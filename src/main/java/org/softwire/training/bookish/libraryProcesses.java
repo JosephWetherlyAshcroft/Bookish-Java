@@ -1,5 +1,6 @@
 package org.softwire.training.bookish;
 import org.jdbi.v3.core.Handle;
+import org.softwire.training.bookish.models.database.Author;
 import org.softwire.training.bookish.models.database.Book;
 
 import java.util.List;
@@ -92,7 +93,7 @@ public class libraryProcesses {
             System.out.println("Author: ");
             String authorInput = sc.next();
             for(int x = 0; x < authors.size(); x++){
-                Author author = authors.get(i);
+                Author author = authors.get(x);
                 if(author.getName().equals(authorInput)){
                     authorExists = true;
                     break;
@@ -129,8 +130,9 @@ public class libraryProcesses {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter title of book: ");
         String titleOfBook = sc.next();
-
-        Optional<Book> book = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books WHERE Title = " + titleOfBook)
+        System.out.println("\nSearch Results: ");
+        Optional<Book> book = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books WHERE Title like (?)")
+                .bind(0, titleOfBook)
                 .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
                 .findFirst();
 
@@ -151,6 +153,115 @@ public class libraryProcesses {
         }
         else{
             System.out.println("Book not found");
+        }
+    }
+
+    public static void editBookDetailsByID(Handle handle){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter ID of book: ");
+        int bookId = Integer.parseInt(sc.next());
+        Optional<Book> book = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books WHERE ID like (?)")
+                .bind(0, bookId)
+                .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
+                .findFirst();
+
+        if (book.isPresent()){
+            System.out.println("\nID: " + book.get().getID() + "\nTitle: " + book.get().getTitle() + "\nISBN: " + book.get().getISBN() + "\nNumber of copies: " +  book.get().getNoOfCopies() + "\nAvailable copies: " + book.get().getAvailableCopies());
+
+            String SELECT_ALL = "SELECT Authors.authorName "
+                    + "FROM Authors JOIN bookAuthor on Authors.id = bookAuthor.authorId "
+                    + "WHERE bookAuthor.bookId = "+ book.get().getID();
+            List<String> bookAuthor = handle.createQuery(SELECT_ALL)
+                    .mapTo(String.class)
+                    .list();
+
+            System.out.println("Author(s): ");
+            for(int n = 0; n < bookAuthor.size(); n++) {
+                System.out.println("- " + bookAuthor.get(n));
+            }
+            System.out.println("Change:\n1)Title\n2)ISBN\n3)Author");
+            String userChoice = sc.next();
+            switch (userChoice){
+                case "1":
+                    System.out.println("What would you ike the new title to be?: ");
+                    String newTitle = sc.next();
+                    handle.createUpdate("UPDATE Books SET Title = (?) WHERE ID = (?)")
+                            .bind(0, newTitle)
+                            .bind(1,bookId)
+                            .execute();
+                    break;
+                case "2":
+                    System.out.println("What would you ike the new ISBN to be?: ");
+                    String newISBN = sc.next();
+                    handle.createUpdate("UPDATE Books SET ISBN = (?) WHERE ID = (?)")
+                            .bind(0, newISBN)
+                            .bind(1,bookId)
+                            .execute();
+                    break;
+                case "3":
+                    String getAuthorID = "SELECT Authors.ID "
+                            + "FROM Authors JOIN bookAuthor on Authors.id = bookAuthor.authorId "
+                            + "WHERE bookAuthor.bookId = "+ book.get().getID();
+                    List<Integer> AuthorID = handle.createQuery(getAuthorID)
+                            .mapTo(Integer.class)
+                            .list();
+
+
+                    System.out.println("Which author would you like to change: ");
+                    System.out.println("Author(s): ");
+                    for(int n = 0; n < bookAuthor.size(); n++) {
+                        System.out.println((n+1) + ") " + bookAuthor.get(n));
+                    }
+                    userChoice = sc.next();
+                    System.out.println("What would you ike the new Author to be?: ");
+                    String newAuthor = sc.next();
+
+                    handle.createUpdate("UPDATE Authors SET authorName = (?) WHERE ID = (?)")
+                            .bind(0, newAuthor)
+                            .bind(1,AuthorID.get(Integer.parseInt(userChoice)-1))
+                            .execute();
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+            }
+        }
+
+        else{
+            System.out.println("Book not found");
+        }
+
+    }
+
+    public static void deleteCopyOfBookByID(Handle handle){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter ID of book: ");
+        int bookId = Integer.parseInt(sc.next());
+        Optional<Book> book = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books WHERE ID like (?)")
+                .bind(0, bookId)
+                .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
+                .findFirst();
+
+        if (book.isPresent()) {
+            if(book.get().getNoOfCopies() == 1){
+                handle.createUpdate("DELETE FROM Books WHERE ID = (?)")
+                        .bind(0, book.get().getID())
+                        .execute();
+            }
+            else {
+                if(book.get().getAvailableCopies() <= book.get().getNoOfCopies()){
+                    if(book.get().getAvailableCopies() >= 0){
+                        handle.createUpdate("UPDATE Books SET availableCopies = (?) WHERE ID = (?)")
+                                .bind(0, book.get().getAvailableCopies() - 1)
+                                .bind(1, book.get().getID())
+                                .execute();
+                    }
+                    handle.createUpdate("UPDATE Books SET noOfCopies = (?) WHERE ID = (?)")
+                            .bind(0, book.get().getNoOfCopies() - 1)
+                            .bind(1, book.get().getID())
+                            .execute();
+                }
+
+            }
         }
     }
 }

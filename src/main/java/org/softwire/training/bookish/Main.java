@@ -21,7 +21,7 @@ public class Main {
         Handle handle = jdbi.open();
         Scanner sc = new Scanner(System.in);
         while(1==1){
-            System.out.println("Welcome to the library! What would you like to do? \n1) View all books \n2) Add a new book \n3) Search for a book by title");
+            System.out.println("Welcome to the library! What would you like to do? \n1) View all books \n2) Add a new book \n3) Search for a book by title\n4) Edit book by ID\n5) Delete book by ID");
             String choice = sc.next();
             switch (choice){
                 case "1":
@@ -32,6 +32,12 @@ public class Main {
                     break;
                 case "3":
                     libraryProcesses.searchByTitle(handle);
+                    break;
+                case "4":
+                    libraryProcesses.editBookDetailsByID(handle);
+                    break;
+                case "5":
+                    libraryProcesses.deleteCopyOfBookByID(handle);
                     break;
                 default:
                     System.out.println("Invalid input!!!!!!!");

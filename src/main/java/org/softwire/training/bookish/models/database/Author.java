@@ -1,4 +1,4 @@
-package org.softwire.training.bookish;
+package org.softwire.training.bookish.models.database;
 
 public class Author {
     int ID;
