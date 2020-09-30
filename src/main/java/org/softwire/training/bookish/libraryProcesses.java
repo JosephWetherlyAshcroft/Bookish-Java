@@ -2,6 +2,7 @@ package org.softwire.training.bookish;
 import org.jdbi.v3.core.Handle;
 import org.softwire.training.bookish.models.database.Author;
 import org.softwire.training.bookish.models.database.Book;
+import org.softwire.training.bookish.models.database.Member;
 
 import java.util.List;
 import java.util.Optional;
@@ -264,4 +265,49 @@ public class libraryProcesses {
             }
         }
     }
+
+    public static void addMember(Handle handle){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please Enter member name: ");
+        String memberName = sc.next();
+
+        handle.createUpdate("insert into Members (name) values (?)")
+                .bind(0,memberName)
+                .execute();
+    }
+
+    public static void outPutAllMembers(Handle handle){
+        List<Member> members = handle.createQuery("SELECT ID, name FROM Members ORDER BY name")
+                .map((rs, ctx) -> new Member(rs.getInt("ID"), rs.getString("name")))
+                .list();
+
+        System.out.println("Library Member List:\n");
+        for(int i = 0; i < members.size(); i++){
+            Member member = members.get(i);
+            System.out.println("\nID: " + member.getID() + "\nName: " + member.getName());
+            }
+    }
+
+    public static void deleteMemberById(Handle handle){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter member ID: ");
+        int memberID = Integer.parseInt(sc.next());
+        handle.createUpdate("DELETE FROM Members WHERE ID = (?)")
+                .bind(0, memberID)
+                .execute();
+    }
+
+    public static void editMemberDetailsByID(Handle handle){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter member ID: ");
+        int memberID = Integer.parseInt(sc.next());
+        System.out.println("Enter new Member name: ");
+        String newMemberName = sc.next();
+        handle.createUpdate("UPDATE Members SET name = (?) WHERE ID = (?)")
+                .bind(0, newMemberName)
+                .bind(1,memberID)
+                .execute();
+    }
+
+
 }

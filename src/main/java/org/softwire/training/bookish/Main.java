@@ -1,12 +1,6 @@
 package org.softwire.training.bookish;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.core.mapper.reflect.ConstructorMapper;
-import org.softwire.training.bookish.models.database.Book;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -21,7 +15,7 @@ public class Main {
         Handle handle = jdbi.open();
         Scanner sc = new Scanner(System.in);
         while(1==1){
-            System.out.println("Welcome to the library! What would you like to do? \n1) View all books \n2) Add a new book \n3) Search for a book by title\n4) Edit book by ID\n5) Delete book by ID");
+            System.out.println("\nWelcome to the library! What would you like to do? \n1) View all books \n2) Add a new book \n3) Search for a book by title\n4) Edit book by ID\n5) Delete book by ID\n6) Add new member\n7) View all members\n8) Delete member by ID\n9) Edit member by ID");
             String choice = sc.next();
             switch (choice){
                 case "1":
@@ -39,6 +33,17 @@ public class Main {
                 case "5":
                     libraryProcesses.deleteCopyOfBookByID(handle);
                     break;
+                case "6":
+                    libraryProcesses.addMember(handle);
+                    break;
+                case "7":
+                    libraryProcesses.outPutAllMembers(handle);
+                    break;
+                case "8":
+                    libraryProcesses.deleteMemberById(handle);
+                    break;
+                case "9":
+                    libraryProcesses.editMemberDetailsByID(handle);
                 default:
                     System.out.println("Invalid input!!!!!!!");
             }
