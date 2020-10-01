@@ -36,6 +36,30 @@ public class LibraryService extends DatabaseService {
         return bookAuthorList;
     }
 
+  /*  public static List<BookAuthor> searchForBook(Handle handle) {
+        List<BookAuthor> bookAuthorList = new ArrayList<>();
+        List<Book> books = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books ORDER BY Title")
+                .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
+                .list();
+
+        for(int i = 0; i < books.size(); i++){
+            Book book = books.get(i);
+            if(book.getTitle().equals())
+
+            String SELECT_ALL = "SELECT Authors.authorName  "
+                    + "FROM Authors JOIN bookAuthor on Authors.id = bookAuthor.authorId "
+                    + "WHERE bookAuthor.bookId = "+ book.getID();
+            List<String> authors = handle.createQuery(SELECT_ALL)
+                    .mapTo(String.class)
+                    .list();
+
+            BookAuthor bookAuthor = new BookAuthor(books.get(i).getID(), books.get(i).getISBN(), books.get(i).getNoOfCopies(), books.get(i).getTitle(), books.get(i).getAvailableCopies(), authors);
+
+            bookAuthorList.add(bookAuthor);
+        }
+        return bookAuthorList;
+    }*/
+
     public static void addNewBook(Handle handle){
 
         List<Book> books = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books")
