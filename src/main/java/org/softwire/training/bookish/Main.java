@@ -14,6 +14,7 @@ public class Main {
         Jdbi jdbi = Jdbi.create(connectionString);
         Handle handle = jdbi.open();
         Scanner sc = new Scanner(System.in);
+
         while(1==1){
             System.out.println("\nWelcome to the library! What would you like to do? \n1) View all books \n2) Add a new book \n3) Search for a book by title\n4) Edit book by ID\n5) Delete book by ID\n6) Add new member\n7) View all members\n8) Delete member by ID\n9) Edit member by ID");
             String choice = sc.next();
@@ -45,7 +46,7 @@ public class Main {
                 case "9":
                     libraryProcesses.editMemberDetailsByID(handle);
                 default:
-                    System.out.println("Invalid input!!!!!!!");
+                    System.out.println("Invalid input");
             }
         }
     }

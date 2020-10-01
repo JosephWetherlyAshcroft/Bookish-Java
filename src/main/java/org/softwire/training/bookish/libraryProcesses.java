@@ -50,13 +50,13 @@ public class libraryProcesses {
         Scanner sc = new Scanner(System.in);
         System.out.println("Adding a new book (Please enter):");
         System.out.println("Title: ");
-        String titleInput = sc.next();
+        String titleInput = sc.nextLine();
         System.out.println("ISBN: ");
-        long isbnInput = Long.parseLong(sc.next());
+        long isbnInput = Long.parseLong(sc.nextLine());
         System.out.println("How many authors?: ");
-        int noOfAuthorsInput = Integer.parseInt(sc.next());
+        int noOfAuthorsInput = Integer.parseInt(sc.nextLine());
         System.out.println("How many copies?: ");
-        int copiesInput = Integer.parseInt(sc.next());
+        int copiesInput = Integer.parseInt(sc.nextLine());
 
         for(int i = 0; i < books.size(); i++){
             Book book = books.get(i);
@@ -92,7 +92,7 @@ public class libraryProcesses {
         }
         for (int i = 0; i <noOfAuthorsInput; i++){
             System.out.println("Author: ");
-            String authorInput = sc.next();
+            String authorInput = sc.nextLine();
             for(int x = 0; x < authors.size(); x++){
                 Author author = authors.get(x);
                 if(author.getName().equals(authorInput)){
@@ -130,7 +130,7 @@ public class libraryProcesses {
     public static void searchByTitle(Handle handle){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter title of book: ");
-        String titleOfBook = sc.next();
+        String titleOfBook = sc.nextLine();
         System.out.println("\nSearch Results: ");
         Optional<Book> book = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books WHERE Title like (?)")
                 .bind(0, titleOfBook)
@@ -160,7 +160,7 @@ public class libraryProcesses {
     public static void editBookDetailsByID(Handle handle){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter ID of book: ");
-        int bookId = Integer.parseInt(sc.next());
+        int bookId = Integer.parseInt(sc.nextLine());
         Optional<Book> book = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books WHERE ID like (?)")
                 .bind(0, bookId)
                 .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
@@ -181,11 +181,11 @@ public class libraryProcesses {
                 System.out.println("- " + bookAuthor.get(n));
             }
             System.out.println("Change:\n1)Title\n2)ISBN\n3)Author");
-            String userChoice = sc.next();
+            String userChoice = sc.nextLine();
             switch (userChoice){
                 case "1":
                     System.out.println("What would you ike the new title to be?: ");
-                    String newTitle = sc.next();
+                    String newTitle = sc.nextLine();
                     handle.createUpdate("UPDATE Books SET Title = (?) WHERE ID = (?)")
                             .bind(0, newTitle)
                             .bind(1,bookId)
@@ -193,7 +193,7 @@ public class libraryProcesses {
                     break;
                 case "2":
                     System.out.println("What would you ike the new ISBN to be?: ");
-                    String newISBN = sc.next();
+                    String newISBN = sc.nextLine();
                     handle.createUpdate("UPDATE Books SET ISBN = (?) WHERE ID = (?)")
                             .bind(0, newISBN)
                             .bind(1,bookId)
@@ -213,9 +213,9 @@ public class libraryProcesses {
                     for(int n = 0; n < bookAuthor.size(); n++) {
                         System.out.println((n+1) + ") " + bookAuthor.get(n));
                     }
-                    userChoice = sc.next();
+                    userChoice = sc.nextLine();
                     System.out.println("What would you ike the new Author to be?: ");
-                    String newAuthor = sc.next();
+                    String newAuthor = sc.nextLine();
 
                     handle.createUpdate("UPDATE Authors SET authorName = (?) WHERE ID = (?)")
                             .bind(0, newAuthor)
@@ -236,7 +236,7 @@ public class libraryProcesses {
     public static void deleteCopyOfBookByID(Handle handle){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter ID of book: ");
-        int bookId = Integer.parseInt(sc.next());
+        int bookId = Integer.parseInt(sc.nextLine());
         Optional<Book> book = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books WHERE ID like (?)")
                 .bind(0, bookId)
                 .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
@@ -269,7 +269,7 @@ public class libraryProcesses {
     public static void addMember(Handle handle){
         Scanner sc = new Scanner(System.in);
         System.out.println("Please Enter member name: ");
-        String memberName = sc.next();
+        String memberName = sc.nextLine();
 
         handle.createUpdate("insert into Members (name) values (?)")
                 .bind(0,memberName)
@@ -291,7 +291,7 @@ public class libraryProcesses {
     public static void deleteMemberById(Handle handle){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter member ID: ");
-        int memberID = Integer.parseInt(sc.next());
+        int memberID = Integer.parseInt(sc.nextLine());
         handle.createUpdate("DELETE FROM Members WHERE ID = (?)")
                 .bind(0, memberID)
                 .execute();
@@ -300,13 +300,12 @@ public class libraryProcesses {
     public static void editMemberDetailsByID(Handle handle){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter member ID: ");
-        int memberID = Integer.parseInt(sc.next());
+        int memberID = Integer.parseInt(sc.nextLine());
         System.out.println("Enter new Member name: ");
-        String newMemberName = sc.next();
+        String newMemberName = sc.nextLine();
         handle.createUpdate("UPDATE Members SET name = (?) WHERE ID = (?)")
                 .bind(0, newMemberName)
                 .bind(1,memberID)
                 .execute();
     }
-
 }
