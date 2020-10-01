@@ -1,15 +1,21 @@
-package org.softwire.training.bookish;
+package org.softwire.training.bookish.services;
 import org.jdbi.v3.core.Handle;
 import org.softwire.training.bookish.models.database.Author;
 import org.softwire.training.bookish.models.database.Book;
 import org.softwire.training.bookish.models.database.Member;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import org.softwire.training.bookish.models.database.Technology;
+import org.springframework.stereotype.Service;
 
-public class libraryProcesses {
-    public static void outPutAllBooks(Handle handle) {
+import java.util.List;
+
+@Service
+public class LibraryService extends DatabaseService {
+    public static List<Book> outPutAllBooks(Handle handle) {
+        List<String> bookAuthorList = new ArrayList<>();
         List<Book> books = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books ORDER BY Title")
                 .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
                 .list();
@@ -17,7 +23,7 @@ public class libraryProcesses {
         System.out.println("Library Books List:\n");
         for(int i = 0; i < books.size(); i++){
             Book book = books.get(i);
-            System.out.println("\nID: " + book.getID() + "\nTitle: " + book.getTitle() + "\nISBN: " + book.getISBN() + "\nNumber of copies: " +  book.getNoOfCopies() + "\nAvailable copies: " + book.getAvailableCopies());
+            String bookInfo = ("\nID: " + book.getID() + "\nTitle: " + book.getTitle() + "\nISBN: " + book.getISBN() + "\nNumber of copies: " +  book.getNoOfCopies() + "\nAvailable copies: " + book.getAvailableCopies());
 
             String SELECT_ALL = "SELECT Authors.authorName "
                     + "FROM Authors JOIN bookAuthor on Authors.id = bookAuthor.authorId "
@@ -25,12 +31,16 @@ public class libraryProcesses {
             List<String> bookAuthor = handle.createQuery(SELECT_ALL)
                     .mapTo(String.class)
                     .list();
-
+            
             System.out.println("Author(s): ");
             for(int n = 0; n < bookAuthor.size(); n++){
-                System.out.println("- " + bookAuthor.get(n));
+                String authorInfo = ("- " + bookAuthor.get(n));
+                bookInfo = bookInfo + " " + authorInfo;
             }
+            
+            bookAuthorList.add(bookInfo);
         }
+        return books;
     }
 
     public static void addNewBook(Handle handle){

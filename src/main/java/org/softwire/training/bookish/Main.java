@@ -1,6 +1,8 @@
 package org.softwire.training.bookish;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
+import org.softwire.training.bookish.services.LibraryService;
+
 import java.util.Scanner;
 
 public class Main {
@@ -20,31 +22,31 @@ public class Main {
             String choice = sc.next();
             switch (choice){
                 case "1":
-                    libraryProcesses.outPutAllBooks(handle);
+                    LibraryService.outPutAllBooks(handle);
                     break;
                 case "2":
-                    libraryProcesses.addNewBook(handle);
+                    LibraryService.addNewBook(handle);
                     break;
                 case "3":
-                    libraryProcesses.searchByTitle(handle);
+                    LibraryService.searchByTitle(handle);
                     break;
                 case "4":
-                    libraryProcesses.editBookDetailsByID(handle);
+                    LibraryService.editBookDetailsByID(handle);
                     break;
                 case "5":
-                    libraryProcesses.deleteCopyOfBookByID(handle);
+                    LibraryService.deleteCopyOfBookByID(handle);
                     break;
                 case "6":
-                    libraryProcesses.addMember(handle);
+                    LibraryService.addMember(handle);
                     break;
                 case "7":
-                    libraryProcesses.outPutAllMembers(handle);
+                    LibraryService.outPutAllMembers(handle);
                     break;
                 case "8":
-                    libraryProcesses.deleteMemberById(handle);
+                    LibraryService.deleteMemberById(handle);
                     break;
                 case "9":
-                    libraryProcesses.editMemberDetailsByID(handle);
+                    LibraryService.editMemberDetailsByID(handle);
                 default:
                     System.out.println("Invalid input");
             }
