@@ -20,12 +20,25 @@
 <div class="container">
     <h2>Books in library:</h2>
     <div class="book-list">
-        <div th:each="books : ${model.books}" class="books">
-            <p th:text="${books.ID}"></p>
-            <p th:text="${books.title}"></p>
-            <p th:text="${books.ISBN}"></p>
-            <p th:text="${books.noOfCopies}"></p>
-            <p th:text="${books.availableCopies}"></p>
+            <table>
+                <tr>
+                    <th>Book ID: </th>
+                    <th>Title: </th>
+                    <th>ISBN: </th>
+                    <th>Number of copies: </th>
+                    <th>Available copies: </th>
+                    <th>Author: </th>
+                </tr>
+                <tr th:each="books : ${model.books}" class="authors">
+                    <td th:text="${books.bookID}">Onions</td>
+                    <td th:text="${books.title}">Onions</td>
+                    <td th:text="${books.ISBN}">Onions</td>
+                    <td th:text="${books.noOfCopies}">Onions</td>
+                    <td th:text="${books.availableCopies}">Onions</td>
+                    <td  th:each="detail: ${books.name}">
+                        <div th:text="${detail}" ></div> </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

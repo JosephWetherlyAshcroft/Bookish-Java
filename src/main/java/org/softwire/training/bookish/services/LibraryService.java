@@ -1,46 +1,39 @@
 package org.softwire.training.bookish.services;
 import org.jdbi.v3.core.Handle;
-import org.softwire.training.bookish.models.database.Author;
-import org.softwire.training.bookish.models.database.Book;
-import org.softwire.training.bookish.models.database.Member;
+import org.softwire.training.bookish.models.database.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-import org.softwire.training.bookish.models.database.Technology;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class LibraryService extends DatabaseService {
-    public static List<Book> outPutAllBooks(Handle handle) {
-        List<String> bookAuthorList = new ArrayList<>();
+    public static List<BookAuthor> outPutAllBooks(Handle handle) {
+        List<BookAuthor> bookAuthorList = new ArrayList<>();
         List<Book> books = handle.createQuery("SELECT ID, ISBN, noOfCopies, Title, availableCopies FROM Books ORDER BY Title")
                 .map((rs, ctx) -> new Book(rs.getInt("ID"), rs.getLong("ISBN"), rs.getInt("noOfCopies"), rs.getString("Title"), rs.getInt("availableCopies")))
                 .list();
 
-        System.out.println("Library Books List:\n");
         for(int i = 0; i < books.size(); i++){
             Book book = books.get(i);
-            String bookInfo = ("\nID: " + book.getID() + "\nTitle: " + book.getTitle() + "\nISBN: " + book.getISBN() + "\nNumber of copies: " +  book.getNoOfCopies() + "\nAvailable copies: " + book.getAvailableCopies());
 
-            String SELECT_ALL = "SELECT Authors.authorName "
+            String SELECT_ALL = "SELECT Authors.authorName  "
                     + "FROM Authors JOIN bookAuthor on Authors.id = bookAuthor.authorId "
                     + "WHERE bookAuthor.bookId = "+ book.getID();
-            List<String> bookAuthor = handle.createQuery(SELECT_ALL)
+            List<String> authors = handle.createQuery(SELECT_ALL)
                     .mapTo(String.class)
                     .list();
+
+            BookAuthor bookAuthor = new BookAuthor(books.get(i).getID(), books.get(i).getISBN(), books.get(i).getNoOfCopies(), books.get(i).getTitle(), books.get(i).getAvailableCopies(), authors);
             
-            System.out.println("Author(s): ");
-            for(int n = 0; n < bookAuthor.size(); n++){
-                String authorInfo = ("- " + bookAuthor.get(n));
-                bookInfo = bookInfo + " " + authorInfo;
-            }
-            
-            bookAuthorList.add(bookInfo);
+            bookAuthorList.add(bookAuthor);
         }
-        return books;
+        return bookAuthorList;
     }
 
     public static void addNewBook(Handle handle){

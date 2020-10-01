@@ -3,6 +3,7 @@ package org.softwire.training.bookish.controllers;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.softwire.training.bookish.models.database.Book;
+import org.softwire.training.bookish.models.database.BookAuthor;
 import org.softwire.training.bookish.models.database.Technology;
 import org.softwire.training.bookish.models.page.AboutPageModel;
 import org.softwire.training.bookish.models.page.BookViewModel;
@@ -39,9 +40,7 @@ public class BookViewController {
 
     @RequestMapping("")
     ModelAndView aboutUs() {
-
-        List<Book> allBooks = libraryService.outPutAllBooks(handle);
-
+        List<BookAuthor> allBooks = libraryService.outPutAllBooks(handle);
         BookViewModel bookViewModel = new BookViewModel();
         bookViewModel.setBooks(allBooks);
 
